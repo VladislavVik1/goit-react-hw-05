@@ -1,0 +1,29 @@
+.main {
+    padding: 24px;
+  }
+  
+  .backLink {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .details {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .poster {
+    width: 300px;
+    border-radius: 8px;
+  }
+  
+  .additional ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 16px;
+  }
+  

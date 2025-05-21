@@ -1,0 +1,15 @@
+.list {
+    padding: 16px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  }
+  

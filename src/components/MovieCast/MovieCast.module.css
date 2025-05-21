@@ -1,0 +1,33 @@
+.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    list-style: none;
+  }
+  
+  .item {
+    width: 120px;
+    text-align: center;
+  }
+  
+  .character {
+    font-style: italic;
+    color: #555;
+  }.list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px;
+    list-style: none;
+  }
+  
+  .item {
+    width: 120px;
+    text-align: center;
+  }
+  
+  .character {
+    font-style: italic;
+    color: #555;
+  }
