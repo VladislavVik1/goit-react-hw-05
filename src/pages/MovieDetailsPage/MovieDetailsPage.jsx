@@ -12,15 +12,9 @@ export default function MovieDetailsPage() {
   useEffect(() => {
     async function fetchMovieDetails() {
       try {
-        const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
-          {
-            headers: {
-              Authorization: 'Bearer YOUR_ACCESS_TOKEN_HERE',
-            },
-          }
-        );
-        setMovie(response.data);
+        const response = await fetchMovieDetails(movieId)
+
+        setMovie(response);
       } catch (error) {
         console.error(error);
       }
