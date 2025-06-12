@@ -1,63 +1,56 @@
-import { useEffect, useState, Suspense } from 'react';
 import { useParams, useLocation, Link, Outlet } from 'react-router-dom';
-import { fetchMovieDetails } from '../../services/api';
-import css from './MovieDetailsPage.module.css';
-
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
   const location = useLocation();
-  const backLink = location.state?.from ?? '/movies';
+  const backLinkRef = useRef(location.state?.from || '/movies'); // ✅ useRef
+
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    fetchMovieDetails(movieId).then(setMovie).catch(console.error);
+    async function fetchMovieDetails() {
+      try {
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
+          {
+            headers: {
+              Authorization: 'Bearer YOUR_ACCESS_TOKEN_HERE',
+            },
+          }
+        );
+        setMovie(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchMovieDetails();
   }, [movieId]);
 
-  if (!movie) return <p>Loading...</p>;
+  if (!movie) return <p>Loading movie...</p>;
 
   return (
-    <main className={css.main}>
-      <Link to={backLink} className={css.backLink}>← Go back</Link>
+    <div>
+      <Link to={backLinkRef.current}>🔙 Go back</Link>
 
-      <div className={css.details}>
-        <img
-          src={movie.poster_path
-            ? `${IMAGE_BASE_URL}${movie.poster_path}`
-            : 'https://via.placeholder.com/300x450?text=No+Image'}
-          alt={movie.title}
-          className={css.poster}
-        />
-        <div>
-          <h1>{movie.title}</h1>
-          <p>User score: {Math.round(movie.vote_average * 10)}%</p>
-          <h3>Overview</h3>
-          <p>{movie.overview}</p>
-          <h3>Genres</h3>
-          <p>{movie.genres.map(genre => genre.name).join(', ')}</p>
-        </div>
-      </div>
+      <h1>{movie.title}</h1>
+      <p>{movie.overview}</p>
 
       <hr />
 
-      <div className={css.additional}>
-        <h3>Additional information</h3>
-        <ul>
-          <li>
-            <Link to="cast" state={{ from: backLink }}>Cast</Link>
-          </li>
-          <li>
-            <Link to="reviews" state={{ from: backLink }}>Reviews</Link>
-          </li>
-        </ul>
-      </div>
+      <p>Additional Information:</p>
+      <ul>
+        <li>
+          <Link to="cast">Cast</Link>
+        </li>
+        <li>
+          <Link to="reviews">Reviews</Link>
+        </li>
+      </ul>
 
-      <hr />
-
-      <Suspense fallback={<div>Loading subpage...</div>}>
-        <Outlet />
-      </Suspense>
-    </main>
+      <Outlet />
+    </div>
   );
 }
