@@ -5,22 +5,28 @@ import axios from 'axios';
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
   const location = useLocation();
-  const backLinkRef = useRef(location.state?.from || '/movies'); // ✅ useRef
+  const backLinkRef = useRef(location.state?.from || '/movies');
 
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    async function fetchMovieDetails() {
+    async function loadMovieDetails() {
       try {
-        const response = await fetchMovieDetails(movieId)
-
-        setMovie(response);
+        const response = await axios.get(
+          `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
+          {
+            headers: {
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkMTZlZjIxMzBmMmFiZjVlODA0YWIzZDhiOGY5YWZhMCIsIm5iZiI6MTc0NzgxNDI1OS4wNjIsInN1YiI6IjY4MmQ4NzczOWMzOTJjMWU2MWY1NjdhMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KvfhQzMhIVnxltC_4sPlzsApPm51QooNAxYYDrA3jsc',
+            },
+          }
+        );
+        setMovie(response.data);
       } catch (error) {
         console.error(error);
       }
     }
 
-    fetchMovieDetails();
+    loadMovieDetails(); // ✅ більше не зациклюється
   }, [movieId]);
 
   if (!movie) return <p>Loading movie...</p>;
